@@ -14,7 +14,7 @@ public class Test {
         //      lower right y
         //      a fill value for all grid cells
         IntGrid2D ttt = new IntGrid2D(-1,1,1,-1,' ');
-        
+
         IIntPoint2D p1 = new IntPoint2D(0,0);
         ttt.setPoint(p1,'X');
         IIntPoint2D p2 = new IntPoint2D(1,1);
@@ -22,14 +22,14 @@ public class Test {
         IIntPoint2D p3 = new IntPoint2D(-1,-1);
         ttt.setPoint(p3,'X');
 
-        // print out the expected board        
+        // print out the expected board
         System.out.println("Board should look like:");
         System.out.println(" | |O");
         System.out.println("-+-+-");
         System.out.println(" |X| ");
         System.out.println("-+-+-");
         System.out.println("X| | ");
-        
+
         // print out the actual board
         System.out.println("Board looks like:");
         for(int y=1;y>-2;y--) {
@@ -41,12 +41,11 @@ public class Test {
                 System.out.println("-+-+-");
             }
         }
-        
+
         // print out the corners
         System.out.println("upper left should be (-1,1) -> "+ttt.getUpperLeftCorner());
         System.out.println("lower right should be (1,-1) -> "+ttt.getLowerRightCorner());
-        
+
         return;
     }
 }
-        
