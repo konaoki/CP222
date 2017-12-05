@@ -27,6 +27,7 @@ public class Test {
 
         // Use the index calls to check the elements are there
         for(int i=0; i<n; i++) {
+          //System.out.println("i: "+i);
             if(list.fetch(i) != i) { test_failed=true; }
         }
         if(test_failed) {
@@ -52,6 +53,7 @@ public class Test {
         list.jumpToTail();
         for(int i=n-1; i>-1; i--) {
             if(list.fetch() != i) { test_failed=true; }
+            //System.out.println("i: "+i+" list.fetch: "+list.fetch());
             list.prev();
         }
         if(test_failed) {
@@ -70,11 +72,11 @@ public class Test {
         for(int i=s; i-2>0; i-=2) {
             list.move(i, i-2);
         }
-        if(list.fetch(n-1) != 0) { test_failed=true; }
-        if(list.fetch(1) != (n-1)) { test_failed=true; }
-        if(list.fetch(0) != 1) { test_failed=true; }
+        if(list.fetch(n-1) != 0) {test_failed=true; }
+        if(list.fetch(1) != (n-1)) {test_failed=true; }
+        if(list.fetch(0) != 1) {test_failed=true; }
         for(int i=2; i<n-2; i++) {
-            if(list.fetch(i) != i) { test_failed=true; }
+            if(list.fetch(i) != i) {test_failed=true; }
         }
         // Check the size and order
         if(test_failed) {
@@ -139,13 +141,13 @@ public class Test {
      */
     public static void main(String[] argv) throws TestFailedException {
         // Construct three new list instances
-        IList<Integer> arrayList  = new ArrayList<Integer>();
-        //IList<Integer> singleList = new SingleLinkList<Integer>();
+        //IList<Integer> arrayList  = new ArrayList<Integer>();
+        IList<Integer> singleList = new SingleLinkList<Integer>();
         //IList<Integer> doubleList = new DoubleLinkList<Integer>();
 
         // Run the tests on each list implementation
-        runTest(arrayList, 105);
-        //runTest(singleList, 105);
+        //runTest(arrayList, 105);
+        runTest(singleList, 105);
         //runTest(doubleList, 105);
     }
 

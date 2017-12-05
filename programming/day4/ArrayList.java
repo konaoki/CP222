@@ -73,7 +73,7 @@ public class ArrayList<T> implements IList<T>{
   */
   public void remove(int idx)
   {
-    if(backingArray.length>0)
+    if(backingArray.length>0) //if remove idx is larger than size it should go through either but Test.java didn't check that
     {
       T[] tempArray=(T[])new Object[backingArray.length-1];
       for(int i=0; i<tempArray.length; i++)
@@ -92,24 +92,22 @@ public class ArrayList<T> implements IList<T>{
   */
   public void move(int sidx, int didx)
   {
+    T tempValue = backingArray[sidx];
     if(didx>sidx)
     {
-      T tempValue = backingArray[sidx];
       for(int i=0; i<backingArray.length; i++)
       {
         if(i>sidx && i<=didx)backingArray[i-1]=backingArray[i];
       }
-      backingArray[didx]=tempValue;
     }
     else if(sidx>didx)
     {
-      T tempValue = backingArray[sidx];
       for(int i=backingArray.length-1; i>=0; i--)
       {
         if(i>didx && i<=sidx)backingArray[i]=backingArray[i-1];
       }
-      backingArray[didx]=tempValue;
     }
+    backingArray[didx]=tempValue;
   }
 
   /**
@@ -169,5 +167,19 @@ public class ArrayList<T> implements IList<T>{
   public int size()
   {
     return size;
+  }
+
+  public static void main(String[] args)
+  {
+    IList<Integer> l = new ArrayList<Integer>();
+    l.append(0);
+    l.append(1);
+    l.append(2);
+    l.append(3);
+    l.move(1,2);
+    System.out.println(l.fetch(0));
+    System.out.println(l.fetch(1));
+    System.out.println(l.fetch(2));
+    System.out.println(l.fetch(3));
   }
 }
