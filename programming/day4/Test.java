@@ -124,7 +124,7 @@ public class Test {
             list.next();
         }
         for(int i=0; i<n/4-1; i++) {
-            if(list.fetch(i) != 2+i*4) { test_failed=true; }
+            if(list.fetch(i) != 2+i*4) {System.out.println("i: "+i+" list.fetch(i): "+list.fetch(i)); test_failed=true; }
         }
         // Check the size and order
         if(test_failed) {
@@ -142,13 +142,13 @@ public class Test {
     public static void main(String[] argv) throws TestFailedException {
         // Construct three new list instances
         //IList<Integer> arrayList  = new ArrayList<Integer>();
-        IList<Integer> singleList = new SingleLinkList<Integer>();
-        //IList<Integer> doubleList = new DoubleLinkList<Integer>();
+        //IList<Integer> singleList = new SingleLinkList<Integer>();
+        IList<Integer> doubleList = new DoubleLinkList<Integer>();
 
         // Run the tests on each list implementation
         //runTest(arrayList, 105);
-        runTest(singleList, 105);
-        //runTest(doubleList, 105);
+        //runTest(singleList, 105);
+        runTest(doubleList, 105);
     }
 
     public static void debugPrint(IList l) {

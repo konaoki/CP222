@@ -71,6 +71,7 @@ public class SingleLinkList<T> implements IList<T> {
   {
     int count=0;
     ISLink cell = head;
+    //System.out.println("idx: "+idx+" size: "+size);
     if(idx<size-1)
     {
       if(idx>0)
@@ -93,6 +94,18 @@ public class SingleLinkList<T> implements IList<T> {
     }
     else if(idx==size-1)
     {
+      while(count<=idx-1)
+      {
+        if(count==idx-1)
+        {
+          cell.setNext(new SingleLinkListCell(v, cell.getNext()));
+        }
+        count++;
+        cell=cell.getNext();
+      }
+    }
+    else if(idx==size)
+    {
       cell = new SingleLinkListCell(v,null);
       tail.setNext(cell);
       tail=cell;
@@ -111,7 +124,8 @@ public class SingleLinkList<T> implements IList<T> {
     jumpToTail();
     current.setNext(cell);
     tail=cell;
-    current=tail;
+    //System.out.println("Tail: "+tail);
+    jumpToTail();
     if(size==0)
     {
       head=tail;
@@ -125,25 +139,38 @@ public class SingleLinkList<T> implements IList<T> {
   */
   public void remove()
   {
-    if(current.equals(head))
+    int countC=0;
+    ISLink cellC = head;
+    while(cellC!=current)
     {
-      head=head.getNext();
-      current=head;
+      countC++;
+      cellC=cellC.getNext();
     }
-    if(size>1)
+    //System.out.println("countC: "+countC+" cellC: "+cellC.getValue());
+    int count=0;
+    ISLink cell = head;
+    if(countC<size && countC>0 && size>0)
     {
-      prev();
-      if(current.getNext().equals(tail))
+      while(count<=countC-1)
       {
-        tail=current;
+        if(count==countC-1)
+        {
+          if(cell.getNext().equals(tail))
+          {
+            tail=cell;
+            current=tail;
+          }
+          cell.setNext(cell.getNext().getNext());
+          current=cell;
+        }
+        cell=cell.getNext();
+        count++;
       }
-      current.setNext(current.getNext().getNext());
     }
-    else if(size==1)
+    else if(countC==0)
     {
-      current=new SingleLinkListCell<T>(null,null);
-      head=current;
-      tail=current;
+      next();
+      head=head.getNext();
     }
     size--;
   }
@@ -190,18 +217,18 @@ public class SingleLinkList<T> implements IList<T> {
   */
   public void move(int sidx, int didx)
   {
-    int count = 0;
-    ISLink<T> tempS=head;
-    while(count<sidx)
+    if(sidx!=didx)
     {
-      count++;
-      tempS=tempS.getNext();
+      int count = 0;
+      ISLink<T> tempS=head;
+      while(count<sidx)
+      {
+        count++;
+        tempS=tempS.getNext();
+      }
+      remove(sidx);
+      insert(didx,tempS.getValue());
     }
-
-    remove(sidx);
-    System.out.println("remove ran");
-    insert(didx,tempS.getValue());
-    System.out.println("insert ran");
   }
 
   /**
@@ -283,6 +310,7 @@ public class SingleLinkList<T> implements IList<T> {
   public void jumpToHead()
   {
     current=head;
+
   }
 
   /**
@@ -300,11 +328,16 @@ public class SingleLinkList<T> implements IList<T> {
     l.append(1);
     l.append(2);
     l.append(3);
-    l.move(2,3);
+    l.append(4);
+    //l.jumpToHead();
+    //l.remove();
+    l.jumpToTail();
+    l.remove();
     System.out.println(l.fetch(0));
     System.out.println(l.fetch(1));
     System.out.println(l.fetch(2));
     System.out.println(l.fetch(3));
+    //System.out.println(l.fetch(4));
   }
 
 }
