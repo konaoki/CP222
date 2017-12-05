@@ -2,42 +2,14 @@
 * Interface for a generic fixed length queue
 */
 public class RingQueue<T> implements IQueue<T> {
-  private class Link<T>
+  int front;
+  int back;
+  T[] ringqueue;
+  public RingQueue(int size)
   {
-    Link<T> next;
-    T value;
-    public Link(T value, Link<T> next)
-    {
-      this.value=value;
-      this.next=next;
-    }
-
-    public Link<T> getNext()
-    {
-      return next;
-    }
-    public T getValue()
-    {
-      return value;
-    }
-    public void setNext(Link<T> n)
-    {
-      next=n;
-    }
-    public String toString()
-    {
-      return value.toString();
-    }
-
-  }
-  Link<T> head;
-  Link<T> tail;
-  int size;
-  public RingQueue(int a)
-  {
-    size=0;
-    head=new Link<T>(null,null);
-    tail=head;
+    front=0;
+    back=0;
+    ringqueue = (T[])new Object[size];
   }
   /**
   * Dequeues the Front element from the queue
@@ -46,12 +18,10 @@ public class RingQueue<T> implements IQueue<T> {
   */
   public T dequeue() throws UnderFlowException
   {
-    if(size==0)throw new UnderFlowException();
-    Link<T> tempHead=head;
-    head=head.getNext();
-    size--;
-    return tempHead.getValue();
-
+    if(ringqueue.length==0)throw new UnderFlowException();
+    T temp = ringqueue[front%ringqueue.length];
+    front = (front+1)%ringqueue.length;
+    return temp;
   }
 
   /**
@@ -61,14 +31,8 @@ public class RingQueue<T> implements IQueue<T> {
   */
   public void enqueue(T v) throws OverFlowException
   {
-    Link<T> newTail = new Link<T>(v,null);
-    tail.setNext(newTail);
-    if(size==0)
-    {
-      head=tail;
-    }
-    tail=newTail;
-    size++;
+    ringqueue[back%ringqueue.length]=v;
+    back=(back+1)%ringqueue.length;
   }
 
 }
