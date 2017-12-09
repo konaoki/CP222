@@ -52,17 +52,19 @@ public class BSTree<K extends Comparable<K>, V> implements IDict<K,V>
     	Node<K,V> tracker=wantToRemove;
     	while(!isRemoved)
     	{
-    		
+
     		if(wantToRemove.right==null)
     		{
     			if(wantToRemove.left==null)
     			{
+    				//System.out.println("paren: "+wantToRemove.parent.key);
     				if(wantToRemove.parent.left==wantToRemove)
     				{
     					wantToRemove.parent.left=null;
     				}
-    				else if(wantToRemove.parent.right==wantToRemove)
+    				if(wantToRemove.parent.right==wantToRemove)
     				{
+    					//System.out.println("remove 5");
     					wantToRemove.parent.right=null;
     				}
     				isRemoved=true;
@@ -76,7 +78,10 @@ public class BSTree<K extends Comparable<K>, V> implements IDict<K,V>
     				}
     				else
     				{
+    					//System.out.println("remove 6");
+    					wantToRemove.left.parent=wantToRemove.parent;
     					wantToRemove.parent.right=wantToRemove.left;
+    					//System.out.println(wantToRemove.parent.right.key);
     					isRemoved=true;
     				}
     			}
@@ -195,19 +200,18 @@ public class BSTree<K extends Comparable<K>, V> implements IDict<K,V>
     {
     	BSTree<Integer,Integer> tree = new BSTree<Integer,Integer>();
     	tree.add(3,3);
-    	tree.add(4,4);
-    	tree.add(0,0);
-    	tree.add(6,6);
-    	tree.add(2,2);
-    	tree.add(5,5);
     	tree.add(1,1);
+    	tree.add(2,2);
+    	tree.add(4,4);
+    	tree.add(6,6);
+    	tree.add(0,0);
+    	tree.add(5,5);
     	for(int i=0; i<7;i++)
     	{
     		System.out.println("i: "+i+" fetched: "+tree.fetch(i));
     	}
     	System.out.println("--------------------");
-    	tree.remove(3);
-    	tree.remove(2);
+    	tree.remove(4);
     	tree.remove(6);
     	for(int i=0; i<7;i++)
     	{
