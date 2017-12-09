@@ -34,15 +34,17 @@ public class Dict<K extends Comparable<K>, V> implements IDict<K,V>
      */
     public V remove(K k)
     {
-    	for(int i=0; i<list.size(); i++)
+    	size--;
+    	int i=0;
+    	while(true)
     	{
     		if(list.get(i).key.equals(k))
     		{
     			list.remove(i);
+    			return null;
     		}
+    		i++;
     	}
-    	size--;
-    	return null;
     }
     /**
      * Returns the size of the dictionary
@@ -61,14 +63,15 @@ public class Dict<K extends Comparable<K>, V> implements IDict<K,V>
      */
     public V fetch(K k)
     {
-    	for(int i=0; i<list.size(); i++)
+    	int i=0;
+    	while(true)
     	{
     		if(list.get(i).key.equals(k))
     		{
     			return (V)list.get(i).value;
     		}
+    		i++;
     	}
-    	return null;
     }
     
     /**
@@ -77,10 +80,10 @@ public class Dict<K extends Comparable<K>, V> implements IDict<K,V>
      */
     public K[] keys()
     {
-    	K[] keys = new K[size];
+    	K[] keys = (K[])new Comparable[size];
     	for(int i=0; i<size; i++)
     	{
-    		keys[i] = list.get(i);
+    		keys[i] = (K)list.get(i).key;
     	}
     	return keys;
     }
