@@ -36,7 +36,7 @@ public class Dict<K extends Comparable<K>, V> implements IDict<K,V>
     {
     	size--;
     	int i=0;
-    	while(true)
+    	while(i<list.size())
     	{
     		if(list.get(i).key.equals(k))
     		{
@@ -64,7 +64,7 @@ public class Dict<K extends Comparable<K>, V> implements IDict<K,V>
     public V fetch(K k)
     {
     	int i=0;
-    	while(true)
+    	while(i<list.size())
     	{
     		if(list.get(i).key.equals(k))
     		{
