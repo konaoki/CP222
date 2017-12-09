@@ -1,17 +1,18 @@
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.util.Random;
+import java.util.ArrayList;
 
 public class Test {
     public static void main(String[] args) throws Exception {
         // Read in some words
         System.out.println("Reading in the words");
-        BufferedReader br=new BufferedReader(new FileReader("shortlist.txt"));
+        BufferedReader br=new BufferedReader(new FileReader("words_alpha.txt"));
         // !!! Choose your favorite list implementation here !!!
-        IList<String> words=new DoubleLinkList<String>();
+        ArrayList<String> words=new ArrayList<String>();
         String l=br.readLine();
         while(l!=null) {
-            words.append(l);
+            words.add(l);
             l=br.readLine();
         }
         
@@ -23,7 +24,7 @@ public class Test {
         Random rand = new Random();
         for(int i=0; words.size()>0; i++) {
             int idx = rand.nextInt(words.size());
-            allwords[i]=words.fetch(idx);
+            allwords[i]=words.get(idx);
             words.remove(idx);
             linear.add(allwords[i],i);
             tree.add(allwords[i],i);
@@ -34,14 +35,14 @@ public class Test {
         long e;
         rand.setSeed(0);
         s = System.currentTimeMillis();
-        for(int i=0; i<100000; i++) {
+        for(int i=0; i<1; i++) {
             int idx = rand.nextInt(allwords.length);
             if(linear.fetch(allwords[idx]) != idx) {
                 System.out.println("bad fetch "+allwords[idx]+" got "+linear.fetch(allwords[idx])+" should have "+idx);
             }
         }
         e = System.currentTimeMillis();
-        System.out.println("Tree dict took "+(e-s)+"ms");
+        System.out.println("Linear dict took "+(e-s)+"ms");
         rand.setSeed(0);
         s = System.currentTimeMillis();
         for(int i=0; i<100000; i++) {
