@@ -8,8 +8,8 @@ public class Test {
         long s;
         long e;
         ISort[] sorts = new ISort[2];
-        sorts[0] = new SelectSort<Integer>();
-        sorts[1] = new MergeSort<Integer>();
+        sorts[1] = new SelectSort<Integer>();
+        sorts[0] = new MergeSort<Integer>();
         //sorts[0] = new MergeSort<Integer>();
 
         Random r = new Random();
