@@ -8,7 +8,7 @@ public class Edge<N,W> implements IEdge<N,W>{
 
   // Implementors should implement a construct that takes in the
   // source, destination, and weight
-  public Edge(N source, N destination, W weight)
+  public Edge(INode<N> source,INode<N> destination, W weight)
   {
     this.source=source;
     this.destination=destination;
@@ -50,6 +50,7 @@ public class Edge<N,W> implements IEdge<N,W>{
   */
   public boolean equals(Object o)
   {
-    return (source==o.source && destination==o.destination)?true:false;
+    IEdge oe = (Edge)o;
+    return (source==oe.getSource() && destination==oe.getDestination())?true:false;
   }
 }
