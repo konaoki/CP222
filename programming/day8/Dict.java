@@ -45,6 +45,7 @@ public class Dict<K extends Comparable<K>, V> implements IDict<K,V>
     		}
     		i++;
     	}
+    	return null;
     }
     /**
      * Returns the size of the dictionary
@@ -72,6 +73,7 @@ public class Dict<K extends Comparable<K>, V> implements IDict<K,V>
     		}
     		i++;
     	}
+    	return null;
     }
     
     /**
