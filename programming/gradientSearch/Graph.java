@@ -165,6 +165,7 @@ public class Graph<N, W>{
       if(isAdd)
       {
         edges.add(e);
+        s.nextNode=d;
       }
     }
 

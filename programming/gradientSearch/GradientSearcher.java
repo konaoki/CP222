@@ -5,6 +5,7 @@ public class GradientSearcher{
 	Boolean[] isVisited;
 	RingQueue<Node<Integer>> queue;
 	Node<Integer> goal;
+	Node<Integer> currentNode;
 	public GradientSearcher()
 	{
 		r = new GraphReader();
@@ -16,6 +17,28 @@ public class GradientSearcher{
 		}
 		queue = new RingQueue<Node<Integer>>(g.width*g.height);
 		goal=g.getNodeSet()[g.goalNodeID];
+
+		System.out.println("width: "+g.width +" height: "+g.height);
+		System.out.println("w*h: "+g.width*g.height+" nodes num: "+g.getNodeSet().length);
+		for(int i=0; i<(g.width*g.height); i++)
+		{
+			if(i==g.goalNodeID)
+			{
+				System.out.print("g");
+			}
+			else if(g.getNodeSet()[i].material == "vacuum")
+			{
+				System.out.print(".");
+			}
+			else
+			{
+				System.out.print("#");
+			}
+			if(i%g.width == g.width-1)
+			{
+				System.out.print("\n");
+			}
+		}
 	}
 	public int[] search(Node<Integer> n)
 	{
@@ -36,7 +59,7 @@ public class GradientSearcher{
 			}
 			
 			n=edgesFrom[minIdx].getDestination();
-			System.out.println("to node: "+n.getValue()+" edge weight: "+edgesFrom[minIdx].getWeight()+" minIdx: "+minIdx);
+			//System.out.println("to node: "+n.getValue()+" edge weight: "+edgesFrom[minIdx].getWeight()+" minIdx: "+minIdx);
 			path.add(n.getValue());
 			if(n==goal)
 			{
@@ -57,102 +80,102 @@ public class GradientSearcher{
 		int left;
 		int up;
 		int down;
+		int radialStep=0;//heuristics to determine the gradient, in this case simply the manhatten distnace from the goal
+		int naiveDistace=0;
 
 		queue.enqueue(goal);
-		int distanceFromGoal =0; //heuristics to determine the gradient, in this case simply the manhatten distnace from the goal
-		Node<Integer> lastSource = null;
 		while(!queue.isEmpty())
 		{
-			Node<Integer> source = queue.dequeue();
-			if(lastSource==null)
-			{
-				lastSource=source;
-			}
-			g.addEdge(source,lastSource,distanceFromGoal); //the initial distanceFromGoal is 0 because the distance from the goal to the goal is 0 but this edge won't get added so doesn't matter
-			origin = source.getValue();
-			right = (origin%g.width<g.width-1)?origin+1:-1; //if origin is the very right, set right index to -1 indicating that there is none
-			left = (origin%g.width>0)?origin-1:-1; //if origin%g.width=0 (origin is the very left) then it will become -1 again indicating that ther
-			up = (origin<g.width)?-1:origin-g.width; //if origin is smaller than the width, it is at the top row
-			down = (origin<g.width*(g.height-1))?origin+g.width:-1; //if origin is smaller than width*(height-1), it is above the very bottom row
+			currentNode = queue.dequeue();
+			g.addEdge(currentNode,currentNode.parentNode,naiveDistace); //the initial distanceFromGoal is 0 because the distance from the goal to the goal is 0 but this edge won't get added so doesn't matter
+			origin = currentNode.getValue();
+			right = (origin%g.width<g.width-2)?origin+1:-1; //if origin is the very right, set right index to -1 indicating that there is none
+			left = (origin%g.width>1)?origin-1:-1; //if origin%g.width=0 (origin is the very left) then it will become -1 again indicating that ther
+			up = (origin<g.width*2)?-1:origin-g.width; //if origin is smaller than the width, it is at the top row
+			down = (origin<g.width*(g.height-1)-g.width)?origin+g.width:-1; //if origin is smaller than width*(height-1), it is above the very bottom row
 
 			//System.out.println("origin: "+origin+" right: "+right+" left: "+left+" up: "+up+" down: "+down);
-			queueing(up);
-			queueing(right);
-			queueing(down);
-			queueing(left);
+			queueing(up,currentNode);
+			queueing(right,currentNode);
+			queueing(down,currentNode);
+			queueing(left,currentNode);
 
-			lastSource=source;
-			distanceFromGoal++; //increase distance from goal each loop step/radial step 
+			naiveDistace++;
+			if((int)((Math.sqrt(1+2*g.getEdgeSet().length)-1)/2) > radialStep)
+			{
+				radialStep++; //doesn't work with walls
+			}
+			
 		}
 		
 	}
-	private void queueing(int idx)
+	private void queueing(int idx, Node<Integer> curr)
 	{
 		if(idx!=-1 && !isVisited[idx])
 		{
-			queue.enqueue(g.getNodeSet()[idx]);
-			isVisited[idx]=true;
+			Node<Integer> n = g.getNodeSet()[idx];
+			if(n.material=="vacuum")
+			{
+				n.parentNode = curr;
+				queue.enqueue(n);
+				isVisited[idx]=true;
+			}
 		}
 	}
 
-	public void printGrid()
+	public void printSearchedGrid(int idx)
 	{
-		System.out.println("goal is at: "+g.goalNodeID);
-		for(int i=0; i<(g.width*g.height); i++)
-		{
-			if(i==g.goalNodeID)
-			{
-				System.out.print("g");
-			}
-			else
-			{
-				System.out.print(".");
-			}
-			if(i%g.width == g.width-1)
-			{
-				System.out.print("\n");
-			}
-		}
 		System.out.println("---search---");
-		Node<Integer> source = g.getNodeSet()[2];
-		int[] nodeIdxs = search(source);
-		boolean b;
-		int count =0;
-		for(int i=0; i<(g.width*g.height); i++)
+		Node<Integer> source = g.getNodeSet()[idx];
+		if(source.material == "vacuum")
 		{
-			b=false;
-			for(int j=0; j<nodeIdxs.length; j++)
+			int[] nodeIdxs = search(source);
+			boolean b;
+			int count =0;
+			for(int i=0; i<(g.width*g.height); i++)
 			{
-				if(i==nodeIdxs[j])
+				b=false;
+				for(int j=0; j<nodeIdxs.length; j++)
 				{
-					b = true;
-					count=(count+1)%10;
+					if(i==nodeIdxs[j])
+					{
+						b = true;
+						count=(count+1)%10;
+					}
+				}
+				if(b)
+				{
+					System.out.print("+");
+				}
+				else if(i==g.goalNodeID)
+				{
+					System.out.print("g");
+				}
+				else if(g.getNodeSet()[i].material == "vacuum")
+				{
+					System.out.print(".");
+				}
+				else
+				{
+					System.out.print("#");
+				}
+				if(i%g.width == g.width-1)
+				{
+					System.out.print("\n");
 				}
 			}
-			if(b)
-			{
-				System.out.print(count);
-			}
-			else if(i==g.goalNodeID)
-			{
-				System.out.print("g");
-			}
-			else
-			{
-				System.out.print(".");
-			}
-			if(i%g.width == g.width-1)
-			{
-				System.out.print("\n");
-			}
 		}
+		
 	}
 
 
 	public static void main(String[] args){
 		GradientSearcher searcher = new GradientSearcher();
 		searcher.generateGradient();
-		searcher.printGrid();
+		searcher.printSearchedGrid(105);
+		searcher.printSearchedGrid(510);
+		searcher.printSearchedGrid(1120);
+		searcher.printSearchedGrid(380);
 	}
 
 

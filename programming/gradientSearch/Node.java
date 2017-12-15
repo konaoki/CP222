@@ -1,5 +1,8 @@
 public class Node<N>{
   N value;
+  Node<N> nextNode; //node at edge destination
+  Node<N> parentNode; //node before one radial step in breadth first gradient map generation
+  String material = ""; //is it a wall or vaccum
   // Implementors should provide a constructor that takes in a single argument, the
   // value for the node to initially hold.
   public Node(N value)

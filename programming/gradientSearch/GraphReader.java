@@ -28,33 +28,44 @@ public class GraphReader{
     try
     {
       Graph<Integer, Integer> graph = new Graph<Integer,Integer>();
-    BufferedReader reader = new BufferedReader(new FileReader(filename));
+      BufferedReader reader = new BufferedReader(new FileReader(filename));
     // Open the file
 
-    String line;
-    int nodeNameCount=0;
+      String line;
+      int nodeNameCount=0;
 
-    while ((line = reader.readLine()) != null) {
-      graph.width=line.length();
-      graph.height++;
-      for(int i=1; i<line.length()-1; i++)
-      {
-        if(line.charAt(i)!='#') //if it's not a wall
+      while ((line = reader.readLine()) != null) {
+        graph.width=line.length();
+        graph.height++;
+        for(int i=0; i<line.length(); i++)
         {
+          Node<Integer> n = graph.addNode(nodeNameCount);
+
           if(line.charAt(i)=='g')//if it's the goal
           {
             graph.goalNodeID=nodeNameCount;
+            n.material = "goal";
+
           }
-          graph.addNode(nodeNameCount);
+          
+          if(line.charAt(i)=='#') //if it's a wall
+          {
+            n.material="wall";
+          }
+          else if(line.charAt(i)=='.')
+          {
+            n.material="vacuum";
+          }
+          
           nodeNameCount++; //adds 1 so next time the above would add 1 then 2
+
+
         }
-        
       }
-    }
-    graph.width-=2;
-    graph.height-=2;
+      //graph.width-=2;
+      //graph.height-=2;
     // Return the graph instance
-    return graph;
+      return graph;
     }
     
     catch (Exception e)
