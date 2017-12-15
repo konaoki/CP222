@@ -48,7 +48,8 @@ public class GradientSearcher{
 		int[] pathAr = new int[0];
 		while(!isGoalFound)
 		{
-			edgesFrom = g.getEdgesFrom(n);
+			//edgesFrom = g.getEdgesFrom(n);
+			edgesFrom = n.getEdgeSet();
 			int minIdx=0;
 			for(int i=0; i<edgesFrom.length; i++)
 			{
@@ -72,6 +73,14 @@ public class GradientSearcher{
 			}
 		}
 		return pathAr;
+	}
+	public void searchWithIndex(int idx)
+	{
+		Node<Integer> source = g.getNodeSet()[idx];
+		if(source.material == "vacuum")
+		{
+			search(source);
+		}
 	}
 	public void generateGradient()
 	{
@@ -125,7 +134,7 @@ public class GradientSearcher{
 
 	public void printSearchedGrid(int idx)
 	{
-		System.out.println("---search---");
+		System.out.println("---search from "+idx+"---");
 		Node<Integer> source = g.getNodeSet()[idx];
 		if(source.material == "vacuum")
 		{
@@ -143,14 +152,18 @@ public class GradientSearcher{
 						count=(count+1)%10;
 					}
 				}
-				if(b)
+				if(i==idx)
 				{
-					System.out.print("+");
+					System.out.print("s");
 				}
 				else if(i==g.goalNodeID)
 				{
 					System.out.print("g");
 				}
+				else if(b)
+				{
+					System.out.print("p");
+				}				
 				else if(g.getNodeSet()[i].material == "vacuum")
 				{
 					System.out.print(".");
@@ -169,14 +182,7 @@ public class GradientSearcher{
 	}
 
 
-	public static void main(String[] args){
-		GradientSearcher searcher = new GradientSearcher();
-		searcher.generateGradient();
-		searcher.printSearchedGrid(105);
-		searcher.printSearchedGrid(510);
-		searcher.printSearchedGrid(1120);
-		searcher.printSearchedGrid(380);
-	}
+
 
 
 }
