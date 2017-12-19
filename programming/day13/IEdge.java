@@ -31,4 +31,6 @@ public interface IEdge<N,W> {
      * @return true if the edges are the same
      */
     public boolean equals(Object o);
+    public boolean getVisited();
+    public void setVisited(boolean v);
 }

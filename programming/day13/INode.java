@@ -16,6 +16,8 @@ public interface INode<N> {
      * @return the current value
      */
     public N getValue(); 
+        public boolean getVisited();
+    public void setVisited(boolean v);
      
      
     // No equals method should be implemented for Nodes since nodes are only equal if 
